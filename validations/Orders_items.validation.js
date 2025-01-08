@@ -9,6 +9,8 @@ module.exports = {
             unit_price: Joi.number().required(),
         });
 
+
+        
         return orderItemsSchema.validate(data, { abortEarly: false })
     }
 }
