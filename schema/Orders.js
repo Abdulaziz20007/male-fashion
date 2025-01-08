@@ -8,7 +8,7 @@ const orderSchema = new Schema({
     },
     total_amount: {
         type: Number,
-        status: []
+        required : true
     },
     status: {
         type: String,

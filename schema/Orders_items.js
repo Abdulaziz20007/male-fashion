@@ -11,7 +11,7 @@ const orderItemsSchema = new Schema({
         ref : "Product",
         required: true
     },
-    product_id: {
+    quantity: {
         type: Number,
         required: true
     },
