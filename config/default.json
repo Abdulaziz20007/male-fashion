@@ -1,0 +1,16 @@
+{
+  "port": 3030,
+  "dbUri": "mongodb+srv://admin:admin123@cluster0.cvebz.mongodb.net/male_fashion",
+  "jwtKey": "qwerty",
+  "jwtTime": 86400000,
+  "accessKey": "AuthorAccessTokenSecretKey",
+  "refreshKey": "AuthorRefreshTokenSecretKey",
+  "accessTime": "15h",
+  "refreshTime": "15d",
+  "cookieTime": 1296000000,
+  "smtpHost": "smtp.mail.ru",
+  "smtpPort": 465,
+  "smtpUser": "tenmemberinteam@mail.ru",
+  "smtpPassword": "4ywPS7xCRM0y6U4Kkufj",
+  "apiUrl": "http://localhost:3030"
+}
