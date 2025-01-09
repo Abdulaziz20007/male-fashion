@@ -19,12 +19,29 @@ const productSchema = new Schema({
     type: [String],
     trim: true,
   },
+  colors: {
+    type: [String],
+    trim: true,
+  },
+  sizes: {
+    type: [String],
+    trim: true,
+  },
+  brand_id: {
+    type: Schema.Types.ObjectId,
+    ref: "Brand",
+    required: true,
+  },
   category_id: {
     type: Schema.Types.ObjectId,
     ref: "Category",
     required: true,
   },
   stock: {
+    type: Boolean,
+    default: false,
+  },
+  discount: {
     type: Number,
     default: 0,
   },
