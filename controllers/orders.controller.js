@@ -67,7 +67,7 @@ const updateOrder = async (req, res) => {
             errorHandler(error, res)
         }
 
-        const updatedOrder = await Orders.findOneAndUpdate({id}, {...value})
+        const updatedOrder = await Orders.findOneAndUpdate({_id:id}, {...value}, {new:true})
 
         if(updatedOrder[0]){
             return res.status(400).send({msg: "order not found"})
