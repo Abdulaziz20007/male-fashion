@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { createViewPage } = require("../helpers/create_view_page");
+const { errorHandler } = require("../helpers/error_handler");
 const Product = require("../schema/Product");
 
 router.get("/index", async (req, res) => {
@@ -15,8 +16,12 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/shop", async (req, res) => {
-  const products = await Product.find();
-  res.render(createViewPage("shop"), { products, title: "Shop" });
+  try {
+    const products = await Product.find();
+    res.render(createViewPage("shop"), { products, title: "Shop" });
+  } catch (error) {
+    errorHandler(err, res)
+  }
 });
 router.get("/about", async (req, res) => {
   res.render(createViewPage("about"), { title: "About" });
