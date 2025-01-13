@@ -49,6 +49,9 @@ const productSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  rating: {
+    type: Number
+  },
 });
 
 module.exports = model("Product", productSchema);

@@ -26,11 +26,10 @@
         <!-- <h6><%= product.rating %></h6> -->
         <a href="#" class="add-cart">+ Add To Cart</a>
         <div class="rating">
-          <% let i = 0 %>
-          <% for (let j = 1; j <= 4; j++) { %>
+          <% for (let j = 1; j <= product.rating; j++) { %>
             <i class="fa fa-star"></i>
           <% } %>
-          <% for (let i = 4 + 1; i <= 5; i++) { %>
+          <% for (let i = product.rating + 1; i <= 5; i++) { %>
           <i class="fa fa-star-o"></i>
           <% } %>
           <i class="fa fa-star-1"></i>
@@ -53,6 +52,7 @@
   </div>
 
 <script>
-  console.log(`<%= product.star %>`);
+  // console.log(`<%= product %>`);
+  // console.log(`<%= product.rating %>`);
   
 </script>
