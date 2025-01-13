@@ -3,7 +3,7 @@
       <div
         class="product__item__pic set-bg"
         data-setbg="img/product/product-3.jpg">
-        <% if(discount) { %>
+        <% if(product.discount) { %>
         <span class="label">Sale</span>
         <% } %> 
         <ul class="product__hover">
@@ -22,16 +22,21 @@
         </ul>
       </div>
       <div class="product__item__text">
-        <h6>Multi-pocket Chest Bag</h6>
+        <h6><%= product.name %></h6>
+        <!-- <h6><%= product.rating %></h6> -->
         <a href="#" class="add-cart">+ Add To Cart</a>
         <div class="rating">
-          <i class="fa fa-star"></i>
-          <i class="fa fa-star"></i>
-          <i class="fa fa-star"></i>
-          <i class="fa fa-star"></i>
+          <% let i = 0 %>
+          <% for (let j = 1; j <= 4; j++) { %>
+            <i class="fa fa-star"></i>
+          <% } %>
+          <% for (let i = 4 + 1; i <= 5; i++) { %>
           <i class="fa fa-star-o"></i>
+          <% } %>
+          <i class="fa fa-star-1"></i>
         </div>
-        <h5>$43.48</h5>
+        
+        <h5>$<%= product.price %></h5>
         <div class="product__color__select">
           <label for="pc-7">
             <input type="radio" id="pc-7" />
@@ -46,3 +51,8 @@
       </div>
     </div>
   </div>
+
+<script>
+  console.log(`<%= product.star %>`);
+  
+</script>
