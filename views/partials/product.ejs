@@ -1,11 +1,11 @@
 <div class="col-lg-4 col-md-6 col-sm-6">
   <div class="product__item sale">
-    <a href="/shop/<%= product.id %>"> 
-    <div
-      class="product__item__pic set-bg"
-      data-setbg= "<%= product.images[0] %>"
+    <a href="/shop/<%= product.id %>">
+      <div
+        class="product__item__pic set-bg <% count % 2 == 0 ? 'new-arrivals' : 'hot-sales' %>"
+        data-setbg="<%= product.images[0] %>"
       >
-      <% if(product.discount) { %>
+        <% if(product.discount) { %>
         <span class="label">Sale</span>
         <% } %>
         <!-- <ul class="product__hover">
@@ -54,5 +54,4 @@
 <script>
   // console.log(`<%= product %>`);
   // console.log(`<%= product.rating %>`);
-  
 </script>

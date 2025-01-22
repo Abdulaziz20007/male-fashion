@@ -24,3 +24,4 @@ app.listen(PORT, async () => {
   await mongoose.connect(config.get("dbUri"));
   console.log(`Server is running on port ${PORT}`);
 });
+
