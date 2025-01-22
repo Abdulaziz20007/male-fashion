@@ -3,8 +3,6 @@ const { createViewPage } = require("../helpers/create_view_page");
 const { errorHandler } = require("../helpers/error_handler");
 const Product = require("../schema/Product");
 
-
-
 router.get("/index", async (req, res) => {
   res.redirect("/");
 });
@@ -19,14 +17,16 @@ router.get("/", async (req, res) => {
 
 router.get("/shop/:id", async (req, res) => {
   try {
-    const id = req.params.id
-   
-    const  product = await Product.findById(id)
+    const id = req.params.id;
 
-    res.render(createViewPage("shop-details"), {product, title: "Shop Details" });
-    
+    const product = await Product.findById(id);
+
+    res.render(createViewPage("shop-details"), {
+      product,
+      title: "Shop Details",
+    });
   } catch (error) {
-    errorHandler(error, res)
+    errorHandler(error, res);
   }
 });
 router.get("/shop", async (req, res) => {
@@ -34,7 +34,7 @@ router.get("/shop", async (req, res) => {
     const products = await Product.find();
     res.render(createViewPage("shop"), { products, title: "Shop" });
   } catch (error) {
-    errorHandler(err, res)
+    errorHandler(err, res);
   }
 });
 router.get("/about", async (req, res) => {
@@ -65,6 +65,9 @@ router.get("/shopping-cart", async (req, res) => {
 });
 router.get("/checkout", async (req, res) => {
   res.render(createViewPage("checkout"), { title: "Checkout" });
+});
+router.get("/sign", async (req, res) => {
+  res.render(createViewPage("signInUp"), { title: "Sign In Up" });
 });
 router.get("/404", async (req, res) => {
   res.render(createViewPage("404"), { title: "404" });
