@@ -259,7 +259,7 @@
             </div>
             <div class="row">
               <% products.forEach(async function(product) { %>
-                <%- include("./partials/product.ejs", {product, star: product.rating}) %>
+                <%- include("./partials/product.ejs", {product}) %>
               <% }) %>                 
             </div>
             <div class="row">
@@ -279,8 +279,8 @@
     </section>
     <!-- Shop Section End -->
 
-    <%- include("./partials/footer.ejs") %>
+    <!-- <%- include("./partials/footer.ejs") %>
     <%- include("./partials/search.ejs") %>
-    <%- include("./partials/jsplugins.ejs") %>
+    <%- include("./partials/jsplugins.ejs") %> -->
   </body>
 </html>
