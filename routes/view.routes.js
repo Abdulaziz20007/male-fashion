@@ -3,6 +3,8 @@ const { createViewPage } = require("../helpers/create_view_page");
 const { errorHandler } = require("../helpers/error_handler");
 const Product = require("../schema/Product");
 
+
+
 router.get("/index", async (req, res) => {
   res.redirect("/");
 });
@@ -15,6 +17,19 @@ router.get("/", async (req, res) => {
   res.render(createViewPage("index"), { products, title: "Home" });
 });
 
+router.get("/shopbyid/:id", async (req, res) => {
+  try {
+    const id = req.params.id
+   console.log(id);
+   
+    const  product = await Product.findById(id)
+
+    res.render(createViewPage("shop-details"), {product, title: "Shop Details" });
+    
+  } catch (error) {
+    errorHandler(error, res)
+  }
+});
 router.get("/shop", async (req, res) => {
   try {
     const products = await Product.find();
@@ -26,9 +41,12 @@ router.get("/shop", async (req, res) => {
 router.get("/about", async (req, res) => {
   res.render(createViewPage("about"), { title: "About" });
 });
+
+
 router.get("/shop-details", async (req, res) => {
   res.render(createViewPage("shop-details"), { title: "Shop Details" });
 });
+
 router.get("/shopping-cart", async (req, res) => {
   res.render(createViewPage("shopping-cart"), { title: "Shopping Cart" });
 });
@@ -47,9 +65,9 @@ router.get("/blog-details", async (req, res) => {
 router.get("/shop", async (req, res) => {
   res.render(createViewPage("shop"), { title: "Shop" });
 });
-router.get("/shop-details", async (req, res) => {
-  res.render(createViewPage("shop-details"), { title: "Shop Details" });
-});
+// router.get("/shop-details", async (req, res) => {
+  //   res.render(createViewPage("shop-details"), { title: "Shop Details" });
+  // });
 router.get("/shopping-cart", async (req, res) => {
   res.render(createViewPage("shopping-cart"), { title: "Shopping Cart" });
 });
