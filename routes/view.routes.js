@@ -20,7 +20,6 @@ router.get("/", async (req, res) => {
 router.get("/shop/:id", async (req, res) => {
   try {
     const id = req.params.id
-   console.log(id);
    
     const  product = await Product.findById(id)
 
