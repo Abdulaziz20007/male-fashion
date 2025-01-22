@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   res.render(createViewPage("index"), { products, title: "Home" });
 });
 
-router.get("/shopbyid/:id", async (req, res) => {
+router.get("/shop/:id", async (req, res) => {
   try {
     const id = req.params.id
    console.log(id);
@@ -42,11 +42,6 @@ router.get("/about", async (req, res) => {
   res.render(createViewPage("about"), { title: "About" });
 });
 
-
-router.get("/shop-details", async (req, res) => {
-  res.render(createViewPage("shop-details"), { title: "Shop Details" });
-});
-
 router.get("/shopping-cart", async (req, res) => {
   res.render(createViewPage("shopping-cart"), { title: "Shopping Cart" });
 });
@@ -65,9 +60,7 @@ router.get("/blog-details", async (req, res) => {
 router.get("/shop", async (req, res) => {
   res.render(createViewPage("shop"), { title: "Shop" });
 });
-// router.get("/shop-details", async (req, res) => {
-  //   res.render(createViewPage("shop-details"), { title: "Shop Details" });
-  // });
+
 router.get("/shopping-cart", async (req, res) => {
   res.render(createViewPage("shopping-cart"), { title: "Shopping Cart" });
 });
