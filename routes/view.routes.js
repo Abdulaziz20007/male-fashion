@@ -21,8 +21,11 @@ router.get("/shop/:id", async (req, res) => {
 
     const product = await Product.findById(id);
 
+    const products = await Product.find().limit(4);
+
     res.render(createViewPage("shop-details"), {
       product,
+      products,
       title: "Shop Details",
     });
   } catch (error) {

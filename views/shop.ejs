@@ -260,6 +260,7 @@
             <div class="row">
               <% let count = 0 %>
               <% products.forEach(async function(product) { %>
+                <% let count = 0 %>
                 <%- include("./partials/product.ejs", {product, count}) %>
                 <% count++ %>
               <% }) %>                 
