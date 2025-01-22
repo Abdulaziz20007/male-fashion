@@ -11,7 +11,7 @@ router.get("/index.html", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().limit(8);
   res.render(createViewPage("index"), { products, title: "Home" });
 });
 

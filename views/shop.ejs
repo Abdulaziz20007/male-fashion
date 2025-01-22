@@ -258,8 +258,10 @@
               </div>
             </div>
             <div class="row">
+              <% let count = 0 %>
               <% products.forEach(async function(product) { %>
-                <%- include("./partials/product.ejs", {product}) %>
+                <%- include("./partials/product.ejs", {product, count}) %>
+                <% count++ %>
               <% }) %>                 
             </div>
             <div class="row">
