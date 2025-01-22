@@ -19,7 +19,7 @@ const contact_messagesSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["sent", "delivered", "read", "failed"],
+      enum: ["sent", "read"],
       default: "sent",
     },
     resolved_at: {
