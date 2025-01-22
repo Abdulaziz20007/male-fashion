@@ -1,58 +1,51 @@
 <div class="col-lg-4 col-md-6 col-sm-6">
-    <div class="product__item sale">
-      <div
-        class="product__item__pic set-bg"
-        data-setbg="img/product/product-3.jpg">
-        <% if(product.discount) { %>
-        <span class="label">Sale</span>
-        <% } %> 
-        <ul class="product__hover">
-          <li>
-            <a href="#"><img src="img/icon/heart.png" alt="" /></a>
-          </li>
-          <li>
-            <a href="#"
-              ><img src="img/icon/compare.png" alt="" />
-              <span>Compare</span></a
-            >
-          </li>
-          <li>
-            <a href="#"><img src="img/icon/search.png" alt="" /></a>
-          </li>
-        </ul>
+  <div class="product__item sale">
+    <div
+      class="product__item__pic set-bg"
+      data-setbg="img/product/product-3.jpg"
+    >
+      <% if(product.discount) { %>
+      <span class="label">Sale</span>
+      <% } %>
+      <ul class="product__hover">
+        <li>
+          <a href="#"><img src="img/icon/heart.png" alt="" /></a>
+        </li>
+        <li>
+          <a href="#"
+            ><img src="img/icon/compare.png" alt="" /> <span>Compare</span></a
+          >
+        </li>
+        <li>
+          <a href="#"><img src="img/icon/search.png" alt="" /></a>
+        </li>
+      </ul>
+    </div>
+    <div class="product__item__text">
+      <h6><%= product.name %></h6>
+      <a href="#" class="add-cart">+ Add To Cart</a>
+      <div class="rating">
+        <% for (let j = 1; j <= product.rating; j++) { %>
+        <i class="fa fa-star"></i>
+        <% } %> <% for (let i = product.rating + 1; i <= 5; i++) { %>
+        <i class="fa fa-star-o"></i>
+        <% } %>
+        <i class="fa fa-star-1"></i>
       </div>
-      <div class="product__item__text">
-        <h6><%= product.name %></h6>
-        <!-- <h6><%= product.rating %></h6> -->
-        <a href="#" class="add-cart">+ Add To Cart</a>
-        <div class="rating">
-          <% for (let j = 1; j <= product.rating; j++) { %>
-            <i class="fa fa-star"></i>
-          <% } %>
-          <% for (let i = product.rating + 1; i <= 5; i++) { %>
-          <i class="fa fa-star-o"></i>
-          <% } %>
-          <i class="fa fa-star-1"></i>
-        </div>
-        
-        <h5>$<%= product.price %></h5>
-        <div class="product__color__select">
-          <label for="pc-7">
-            <input type="radio" id="pc-7" />
-          </label>
-          <label class="active black" for="pc-8">
-            <input type="radio" id="pc-8" />
-          </label>
-          <label class="grey" for="pc-9">
-            <input type="radio" id="pc-9" />
-          </label>
-        </div>
+
+      <h5>$<%= product.price %></h5>
+      <div class="product__color__select">
+        <label for="pc-7">
+          <input type="radio" id="pc-7" />
+        </label>
+        <label class="active black" for="pc-8">
+          <input type="radio" id="pc-8" />
+        </label>
+        <label class="grey" for="pc-9">
+          <input type="radio" id="pc-9" />
+        </label>
       </div>
     </div>
   </div>
+</div>
 
-<script>
-  // console.log(`<%= product %>`);
-  // console.log(`<%= product.rating %>`);
-  
-</script>

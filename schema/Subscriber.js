@@ -20,15 +20,9 @@ const subscriberSchema = new mongoose.Schema(
       default: true,
       required: true,
     },
-    unsubscribed_at: {
-      type: Date,
-      default: null,
-    },
   },
   {
     timestamps: true,
-    // Add index for email queries
-    indexes: [{ email: 1 }],
   }
 );
 
