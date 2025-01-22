@@ -8,23 +8,15 @@ class JwtService {
     this.accessTime = accessTime;
     this.refreshTime = refreshTime;
   }
-  generateTokens(payload, role) {
+  generateTokens(payload) {
     console.log(payload);
 
-    const accessToken = jwt.sign(
-      payload,
-      role === "user" ? this.userKey : this.adminKey,
-      {
-        expiresIn: this.accessTime,
-      }
-    );
-    const refreshToken = jwt.sign(
-      payload,
-      role === "user" ? this.userKey : this.adminKey,
-      {
-        expiresIn: this.refreshTime,
-      }
-    );
+    const accessToken = jwt.sign(payload, this.accessKey, {
+      expiresIn: this.accessTime,
+    });
+    const refreshToken = jwt.sign(payload, this.refreshKey, {
+      expiresIn: this.refreshTime,
+    });
 
     // return accessToken, refreshToken;
     return { accessToken: accessToken, refreshToken: refreshToken };
@@ -40,8 +32,8 @@ class JwtService {
 }
 
 module.exports = new JwtService(
-  config.get("userKey"),
-  config.get("adminKey"),
+  config.get("accessKey"),
+  config.get("refreshKey"),
   config.get("accessTime"),
   config.get("refreshTime")
 );
