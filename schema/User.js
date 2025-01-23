@@ -33,7 +33,7 @@ const userSchema = new Schema({
     type: String,
     trim: true,
   },
-  verification_id: {
+  verification: {
     type: String,
     trim: true,
   },
