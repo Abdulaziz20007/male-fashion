@@ -164,7 +164,8 @@ const verifyUser = async (req, res) => {
   await User.findByIdAndUpdate(user._id, {
     isVerified: true,
   });
-  res.status(200).send({ message: "User aktivatsiya qilindi" });
+  res.redirect("/sign");
+  // res.status(200).send({ message: "User aktivatsiya qilindi" });
 };
 
 module.exports = {
