@@ -32,10 +32,10 @@ class JwtService {
 }
 
 module.exports = new JwtService(
-  config.get("access_key"),
-  config.get("refresh_key"),
-  config.get("access_time"),
-  config.get("refresh_time")
+  config.get("accessKey"),
+  config.get("refreshKey"),
+  config.get("accessTime"),
+  config.get("refreshTime")
 );
 
 // FOYDALANISH
