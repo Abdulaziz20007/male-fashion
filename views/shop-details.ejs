@@ -55,18 +55,63 @@
                     <div class="product__details__option">
                       <div class="product__details__option__size">
                         <span>Size:</span>
-                        <% for(let size of product.sizes){ %>
 
-                          <label for="<%=size%>"><%= size %>
-                              <input type="radio" id="xxl" />
+                        <label id="xxl_label" for="xxl" class="active"><%= product.sizes[0] %>
+                          <input type="radio"  id="xxl" />
+                        </label>
+                        
+                        <% if(product.sizes[1]){ %>
+                          <label id="xl_label" for="xl"><%= product.sizes[1] %>
+                            <input type="radio" id="xl" />
                           </label>
-
                           <% } %>
+                        
+                        <% if(product.sizes[2]){ %>
+                          <label id="l_label" for="l"><%= product.sizes[2] %>
+                            <input type="radio" id="l" />
+                          </label>
+                          <% } %>
+                        <% if(product.sizes[3]){ %>
+                          <label id="s_label" for="s"><%= product.sizes[3] %>
+                            <input type="radio" id="s" />
+                          </label>
+                          <% } %>
+                        
                       </div>
+
+                      <!-- FOR SIZE RADIO BUTTONS -->
                       <script>
 
-
+                        const sizeXxl = document.getElementById("xxl")
+                        const sizeXl = document.getElementById("xl")
+                        const sizeL = document.getElementById("l")
+                        const sizeS = document.getElementById("s")
                         
+                        sizeXxl.addEventListener('click', ()=>{
+                          document.getElementById("xxl_label").className = "active"
+                          document.getElementById("xl_label").className = ""
+                          document.getElementById("l_label").className = ""
+                          document.getElementById("s_label").className = ""
+                        })
+                        sizeXl.addEventListener('click', ()=>{
+                          document.getElementById("xxl_label").className = ""
+                          document.getElementById("xl_label").className = "active"
+                          document.getElementById("l_label").className = ""
+                          document.getElementById("s_label").className = ""
+                        })
+                        sizeL.addEventListener('click', ()=>{
+                          document.getElementById("xxl_label").className = ""
+                          document.getElementById("xl_label").className = ""
+                          document.getElementById("l_label").className = "active"
+                          document.getElementById("s_label").className = ""
+                        })
+                        sizeS.addEventListener('click', ()=>{
+                          document.getElementById("xxl_label").className = ""
+                          document.getElementById("xl_label").className = ""
+                          document.getElementById("l_label").className = ""
+                          document.getElementById("s_label").className = "active"
+                        })
+
                       </script>
                       <div class="product__details__option__color">
                         <span>Color:</span>
