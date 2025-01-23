@@ -2,7 +2,8 @@ const User = require("../schema/User");
 const { errorHandler } = require("../helpers/error_handler");
 const { userValidation } = require("../validations/user.validation");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt");
-const { generateTokens } = require("../services/jwt_service");
+const jwt = require("../services/jwt_service");
+const config = require("config");
 
 const getUsers = async (req, res) => {
   try {
@@ -91,9 +92,11 @@ const login = async (req, res) => {
       id: user._id,
       email: user.email,
       name: user.name,
+      surname: user.surname,
+      phone: user.phone,
     };
 
-    const tokens = generateToken(payload, "user");
+    const tokens = jwt.generateTokens(payload);
     res.cookie("refreshToken", tokens.refreshToken, {
       httpOnly: true,
       secure: true,
@@ -124,7 +127,7 @@ const refreshToken = async (req, res) => {
     return res.status(401).send({ error: "Unauthorized" });
   }
 
-  const tokens = generateToken(payload, "user");
+  const tokens = jwt.generateTokens(payload);
 
   await User.findByIdAndUpdate(payload.id, {
     refreshToken: tokens.refreshToken,
