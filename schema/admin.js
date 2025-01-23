@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const adminSchema = new Schema({
+const AdminSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -30,6 +30,9 @@ const adminSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  refresh_token: {
+    type: String,
+  },
 });
 
-module.exports = model("Admin", adminSchema);
+module.exports = model("Admin", AdminSchema);

@@ -1,8 +1,9 @@
 const { errorHandler } = require("../helpers/error_handler");
-const admin = require("../schema/admin");
+const Admin = require("../schema/admin");
 const jwtService = require("../services/jwt_service");
 const { adminValidation } = require("../validations/admin.validation");
 const bcrypt = require('bcrypt');
+const config = require("config")
 
 const addAdmin = async (req, res) => {
     try {
@@ -11,14 +12,14 @@ const addAdmin = async (req, res) => {
             return errorHandler(error, res);
         }
 
-        const oldAdmin = await admin.findOne({ email: value.email });
+        const oldAdmin = await Admin.findOne({ email: value.email });
         if (oldAdmin) {
             return res.status(400).send("BU email orqali admin ro'yxatdan o'tgan akamuloo");
         }
 
         const hashedPassword = await bcrypt.hash(value.password, 8);
 
-        const Admin = await admin.create({
+        const admin = await Admin.create({
             ...value,
             password: hashedPassword
         });
@@ -26,14 +27,14 @@ const addAdmin = async (req, res) => {
         const payload = {
             username: value.username,
             email: value.email,
-            is_creator: Admin.is_creator, // admin.is_creator to'g'rilandi.
-        };
+            is_creator: admin.is_creator, 
+                };
 
         const token = jwtService.generateTokens(payload);
 
         res.status(201).send({
             message: 'admin muvaffaqiyatli ro‘yxatdan o‘tdi',
-            Admin,
+            admin,
             access_token: token.accessToken
         });
 
@@ -44,9 +45,9 @@ const addAdmin = async (req, res) => {
 
 const getAdmin = async (req, res) => {
     try {
-        const admins = await admin.find();
+        const admins = await Admin.find();
 
-        if (!admins || admins.length === 0) { // length tekshiruvi qo'shildi.
+        if (!admins) {
             return res.status(404).send("Adminlar topilmadi");
         }
 
@@ -58,13 +59,12 @@ const getAdmin = async (req, res) => {
 
 const getAdminById = async (req, res) => {
     try {
-        const idadmin = req.params.id;
-        const Admin = await admin.findById(idadmin);
+        const admin = await Admin.findById(req.params.id);
 
-        if (!Admin) {
+        if (!admin) {
             return res.status(404).send("bunday idli Admin topilmadi");
         }
-        res.status(200).send(Admin);
+        res.status(200).send(admin);
     } catch (error) {
         errorHandler(error, res);
     }
@@ -79,10 +79,9 @@ const updateAdminById = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(value.password, 8);
 
-        const updatedAdmin = await admin.findByIdAndUpdate(
+        const updatedAdmin = await Admin.findByIdAndUpdate(
             req.params.id,
-            { ...value, password: hashedPassword },
-            { new: true } // Yangilangan hujjatni qaytarish uchun.
+            { ...value, password: hashedPassword }
         );
 
         if (!updatedAdmin) {
@@ -101,13 +100,13 @@ const updateAdminById = async (req, res) => {
 
 const deleteAdminById = async (req, res) => {
     try {
-        const Admin = await admin.findById(req.params.id);
+        const admin = await Admin.findById(req.params.id);
 
-        if (!Admin) {
+        if (!admin) {
             return res.status(404).send({ message: 'Admin not found' });
         }
 
-        await Admin.deleteOne();
+        await admin.deleteOne();
 
         res.status(204).send({
             message: "Admin deleted"
@@ -122,32 +121,32 @@ const loginAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const Admin = await admin.findOne({ email }); // To'g'rilangan qidiruv parametri.
+        const admin = await Admin.findOne({ email }); 
 
-        if (!Admin) {
+        if (!admin) {
             return res.status(401).send({ message: "Invalid email or password" });
         }
 
-        const validPassword = bcrypt.compareSync(password, Admin.password);
+        const validPassword = bcrypt.compareSync(password, admin.password);
         if (!validPassword) {
             return res.status(401).send({ message: "Invalid email or password" });
         }
 
         const payload = {
-            id: Admin._id,
-            email: Admin.email,
-            is_creator: Admin.is_creator,
-            role: "admin"
+            username: admin.username,
+            email: admin.email,
+            is_creator: admin.is_creator,
         };
 
         const tokens = jwtService.generateTokens(payload);
 
         res.cookie("refreshToken", tokens.refreshToken, {
             httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000 // Cookie muddati aniq belgilandi.
+            maxAge:  7 * 24 * 60 * 60 * 1000
         });
 
-        await admin.findByIdAndUpdate(Admin._id, { refresh_token: tokens.refreshToken }); // refresh_token yangilandi.
+        admin.refresh_token = tokens.refreshToken  
+        await admin.save()
 
         res.status(200).send({
             message: "Hush kelibsiz ....",
@@ -161,23 +160,21 @@ const loginAdmin = async (req, res) => {
 
 const logoutAdmin = async (req, res) => {
     try {
+        
         const { refreshToken } = req.cookies;
 
-        if (!refreshToken) {
-            return res.status(404).send({ message: "Token topilmadi" });
-        }
+    if (!refreshToken) {
+      return res.status(400).send({ message: "Token topilmadi!" });
+    }
 
-        const Admin = await admin.findOne({ refresh_token: refreshToken });
+    const admin = await Admin.findOne({ refresh_token: refreshToken });
 
-        if (!Admin) {
-            return res.status(404).send({ message: "Admin topilmadi" });
-        }
+    if (!admin) {
+      return res.status(404).send({ message: "Bunday token admin topilmadi!" });
+    }
 
-        res.clearCookie("refreshToken");
-
-        await admin.findByIdAndUpdate(Admin._id, { refresh_token: null }); // refresh_token tozalandi.
-
-        res.status(200).send({ message: "Logout muvaffaqiyatli bajarildi" });
+    res.clearCookie("refreshToken");
+    res.status(200).send({ message: "Admin tizimdan chiqdi" });
 
     } catch (error) {
         errorHandler(error, res);
@@ -186,49 +183,51 @@ const logoutAdmin = async (req, res) => {
 
 const refreshAdminToken = async (req, res) => {
     try {
-        const { refreshToken } = req.cookies;
-
-        if (!refreshToken) {
-            return res.status(404).send({ message: "Token topilmadi" });
-        }
-
-        let tokenPayload;
-        try {
-            tokenPayload = jwtService.verifyRefreshToken(refreshToken); // refreshToken tekshiriladi.
-        } catch (error) {
-            return res.status(403).send({ message: "Token yaroqsiz" });
-        }
-
-        const Admin = await admin.findOne({ refresh_token: refreshToken });
-
-        if (!Admin) {
-            return res.status(404).send({ message: "Admin topilmadi" });
-        }
-
-        const payload = {
-            id: Admin._id,
-            email: Admin.email,
-            is_creator: Admin.is_creator
-        };
-
-        const tokens = jwtService.generateTokens(payload);
-
-        await admin.findByIdAndUpdate(Admin._id, { refresh_token: tokens.refreshToken });
-
-        res.cookie("refreshToken", tokens.refreshToken, {
-            httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
-
-        res.status(200).send({
-            message: "Yangi token yaratildi",
-            access_token: tokens.accessToken
-        });
-
+      const { refreshToken } = req.cookies;
+  
+      if (!refreshToken) {
+        return res.status(404).send({ message: "AdminToken not found token" })
+      }
+  
+      try {
+        const tokenFromCookie = await jwtService.verifyRefreshToken(refreshToken)
+        console.log(tokenFromCookie);
+  
+      } catch (error) {
+        return errorHandler(error, res)
+      }
+  
+      const admin = await Admin.findOne({ refresh_token: refreshToken })
+  
+      if (!admin) {
+        return res.status(404).send({ message: "Admin not found" })
+      }
+  
+      const payload = {
+        username: admin.username,
+        email: admin.email,
+        is_creator: admin.is_creator,
+      };
+  
+      const tokens = jwtService.generateTokens(payload);
+      console.log(tokens);
+  
+  
+      res.cookie("refreshToken", tokens.refreshToken, {
+        hhtpOnly: true,
+        maxAge:  7 * 24 * 60 * 60 * 1000
+      });
+  
+      res.status(200).send({
+        message: "Hush kelibsz",
+        refreshToken: admin.refreshToken,
+        access_token: tokens.accessToken
+      });
+  
     } catch (error) {
-        errorHandler(error, res);
+      errorHandler(error, res)
     }
-};
+  };
 
 module.exports = {
     addAdmin,

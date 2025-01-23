@@ -2,10 +2,10 @@ const { getAdmin, getAdminById, addAdmin, updateAdminById, deleteAdminById, logi
 
 const adminRouter = require("express").Router()
 
+adminRouter.get("/logout", logoutAdmin)
+adminRouter.get("/refresh", refreshAdminToken)
 adminRouter.get("/", getAdmin)
 adminRouter.get("/:id", getAdminById)
-adminRouter.get("/logout", logoutAdmin)
-adminRouter.get("/:refresh", refreshAdminToken)
 adminRouter.post("/", addAdmin)
 adminRouter.post("/login", loginAdmin)
 adminRouter.put("/:id", updateAdminById)
