@@ -14,7 +14,8 @@ class MailService {
       },
     });
   }
-  async sendMailActivationCode(toEmail, link) {
+  async sendMailActivationCode(toEmail, verification) {
+    const link = `${config.get("apiUrl")}/api/users/verify/${verification}`;
     console.log("Recipient email:", toEmail);
     await this.transporter.sendMail({
       from: config.get("smtpUser"),
