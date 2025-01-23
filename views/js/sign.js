@@ -85,7 +85,7 @@ async function handleAuth(event) {
       if (decoded) updateNavbar(decoded.name);
       window.location.href = "/";
     } else {
-      alert("Registration successful! Please login.");
+      alert("Registration successful! Please activate your account.");
       toggleForm();
     }
   } catch (error) {

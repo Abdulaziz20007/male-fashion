@@ -95,6 +95,9 @@ const login = async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(404).send({ error: "Email yoki parol noto'g'ri" });
     }
+    if (!user.is_active) {
+      return res.status(404).send({ error: "User aktivatsiya qilinmagan" });
+    }
 
     const payload = {
       id: user._id,
