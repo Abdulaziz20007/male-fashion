@@ -21,29 +21,26 @@ function toggleForm() {
   const authForm = document.querySelector(".auth-form");
   const authSwitch = document.querySelector(".auth-switch");
 
-  if (window.innerWidth <= 768) {
-    authForm.classList.toggle("active");
-  } else {
-    const switchIcon = authSwitch.querySelector(".switch-icon i");
-    const switchText = authSwitch.querySelector(".switch-text");
-    const switchDescription = authSwitch.querySelector(".switch-description");
-    const switchButton = authSwitch.querySelector(".site-btn");
+  authForm.classList.toggle("active");
 
-    authForm.classList.toggle("active");
+  // Only update text/icons on desktop
+  if (window.innerWidth > 768) {
+    const isSignup = authForm.classList.contains("active");
+    const elements = {
+      icon: authSwitch.querySelector(".switch-icon i"),
+      text: authSwitch.querySelector(".switch-text"),
+      desc: authSwitch.querySelector(".switch-description"),
+      btn: authSwitch.querySelector(".site-btn"),
+    };
 
-    if (authForm.classList.contains("active")) {
-      switchIcon.className = "fa fa-sign-in";
-      switchText.textContent = "Already have an account?";
-      switchDescription.textContent =
-        "Sign in to access your existing account and continue shopping";
-      switchButton.textContent = "Sign In";
-    } else {
-      switchIcon.className = "fa fa-user-plus";
-      switchText.textContent = "Don't have an account?";
-      switchDescription.textContent =
-        "Join us to unlock exclusive features and personalized shopping experience";
-      switchButton.textContent = "Sign Up";
-    }
+    elements.icon.className = isSignup ? "fa fa-sign-in" : "fa fa-user-plus";
+    elements.text.textContent = isSignup
+      ? "Already have an account?"
+      : "Don't have an account?";
+    elements.desc.textContent = isSignup
+      ? "Sign in to access your existing account and continue shopping"
+      : "Join us to unlock exclusive features and personalized shopping experience";
+    elements.btn.textContent = isSignup ? "Sign In" : "Sign Up";
   }
 }
 
@@ -54,37 +51,23 @@ async function handleAuth(event) {
   const data = Object.fromEntries(formData);
   const authType = form.getAttribute("data-auth-type");
 
-  const endpoints = {
-    login: {
-      url: "/api/users/login",
-      body: {
-        email: data.email,
-        password: data.password,
-      },
-    },
-    register: {
-      url: "/api/users",
-      body: {
-        name: data.name,
-        surname: data.surname,
-        email: data.email,
-        phone: data.phone,
-        password: data.password,
-      },
-    },
-    refresh: {
-      url: "/api/users/refresh",
-    },
-  };
-
-  const config = endpoints[authType];
-  if (!config) return;
-
-  // For registration, check passwords match
   if (authType === "register" && data.password !== data.confirmPassword) {
     alert("Passwords do not match");
     return;
   }
+
+  const config = {
+    login: {
+      url: "/api/users/login",
+      body: { email: data.email, password: data.password },
+    },
+    register: {
+      url: "/api/users",
+      body: { ...data, confirmPassword: undefined },
+    },
+  }[authType];
+
+  if (!config) return;
 
   try {
     const response = await fetch(config.url, {
@@ -94,17 +77,12 @@ async function handleAuth(event) {
     });
 
     const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.error || `${authType} failed`);
-    }
+    if (!response.ok) throw new Error(result.error || `${authType} failed`);
 
     if (authType === "login") {
       localStorage.setItem("accessToken", result.accessToken);
-      const decodedToken = decodeToken(result.accessToken);
-      if (decodedToken) {
-        updateNavbar(decodedToken.name);
-      }
+      const decoded = decodeToken(result.accessToken);
+      if (decoded) updateNavbar(decoded.name);
       window.location.href = "/";
     } else {
       alert("Registration successful! Please login.");
@@ -119,10 +97,8 @@ async function handleAuth(event) {
 function checkAuthStatus() {
   const token = localStorage.getItem("accessToken");
   if (token) {
-    const decodedToken = decodeToken(token);
-    if (decodedToken) {
-      updateNavbar(decodedToken.name);
-    }
+    const decoded = decodeToken(token);
+    if (decoded) updateNavbar(decoded.name);
   }
 }
 
@@ -137,7 +113,6 @@ function updateNavbar(userName) {
 
 async function handleLogout(event) {
   event.preventDefault();
-
   try {
     const response = await fetch("/api/users/logout", {
       method: "POST",
@@ -147,7 +122,6 @@ async function handleLogout(event) {
     });
 
     if (!response.ok) throw new Error("Logout failed");
-
     localStorage.removeItem("accessToken");
     window.location.href = "/";
   } catch (error) {
