@@ -4,6 +4,8 @@ const { userValidation } = require("../validations/user.validation");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const jwt = require("../services/jwt_service");
 const config = require("config");
+const { v4: uuidv4 } = require("uuid");
+const mailService = require("../services/mail.service");
 
 const getUsers = async (req, res) => {
   try {
@@ -33,6 +35,12 @@ const createUser = async (req, res) => {
       errorHandler(error, res);
     }
     value.password = hashPassword(value.password);
+
+    const verification = uuidv4();
+    value.verification = verification;
+
+    await mailService.sendMailActivationCode(value.email, verification);
+
     const user = await User.create(value);
     res.status(201).send(user);
   } catch (error) {
@@ -142,6 +150,20 @@ const refreshToken = async (req, res) => {
   res.status(200).send({ accessToken: tokens.accessToken });
 };
 
+const verifyUser = async (req, res) => {
+  const user = await User.findOne({ verification: req.params.id });
+  if (!user) {
+    return res.status(404).send({ error: "User topilmadi" });
+  }
+  if (user.isVerified) {
+    return res.status(400).send({ error: "User aktivatsiya qilingan" });
+  }
+  await User.findByIdAndUpdate(user._id, {
+    isVerified: true,
+  });
+  res.status(200).send({ message: "User aktivatsiya qilindi" });
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -151,4 +173,5 @@ module.exports = {
   login,
   logout,
   refreshToken,
+  verifyUser,
 };

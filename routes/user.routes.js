@@ -9,6 +9,7 @@ const {
   login,
   logout,
   refreshToken,
+  verifyUser,
 } = require("../controllers/users.controller");
 
 router.post("/login", login);
@@ -20,5 +21,7 @@ router.get("/:id", userGuard, userSelfGuard, getUserById);
 router.post("/", createUser);
 router.put("/:id", userGuard, userSelfGuard, updateUserById);
 router.delete("/:id", userGuard, userSelfGuard, deleteUserById);
+
+router.get("/verify/:id", verifyUser);
 
 module.exports = router;
