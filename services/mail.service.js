@@ -20,12 +20,12 @@ class MailService {
     await this.transporter.sendMail({
       from: config.get("smtpUser"),
       to: toEmail,
-      subject: "ITINFO akkauntini faollashtirish",
+      subject: "MALE FASHION akkauntini faollashtirish",
       text: "",
       html: `
-    <div>
-      <h2>Akkauntni faollashtirish uchun quyidagi linkni bosing</h2>
-      <a href="${link}">FAOLLASHTIRISH</a>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa; border-radius: 10px; text-align: center;">
+      <h2 style="color: #333; margin-bottom: 20px;">Akkauntni faollashtirish uchun quyidagi linkni bosing</h2>
+      <a href="${link}" style="display: inline-block; padding: 12px 30px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px;">FAOLLASHTIRISH</a>
     </div>
         `,
     });
