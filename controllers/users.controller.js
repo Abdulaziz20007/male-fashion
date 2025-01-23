@@ -158,11 +158,11 @@ const verifyUser = async (req, res) => {
   if (!user) {
     return res.status(404).send({ error: "User topilmadi" });
   }
-  if (user.isVerified) {
+  if (user.is_active) {
     return res.status(400).send({ error: "User aktivatsiya qilingan" });
   }
   await User.findByIdAndUpdate(user._id, {
-    isVerified: true,
+    is_active: true,
   });
   // res.redirect("/sign");
   res.status(200).send({ message: "User aktivatsiya qilindi" });
