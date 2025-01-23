@@ -41,4 +41,4 @@ module.exports = new JwtService(
 // FOYDALANISH
 // const jwtService = require("../services/jwt_service");
 
-// const tokens = jwtService.generateTokens(payload)
+// const tokens = jwtService.generateTokens(payload, "user" yoki "admin")

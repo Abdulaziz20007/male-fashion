@@ -11,24 +11,39 @@ router.get("/index.html", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().limit(8);
   res.render(createViewPage("index"), { products, title: "Home" });
 });
 
+router.get("/shop/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const product = await Product.findById(id);
+
+    const products = await Product.find().limit(4);
+
+    res.render(createViewPage("shop-details"), {
+      product,
+      products,
+      title: "Shop Details",
+    });
+  } catch (error) {
+    errorHandler(error, res);
+  }
+});
 router.get("/shop", async (req, res) => {
   try {
     const products = await Product.find();
     res.render(createViewPage("shop"), { products, title: "Shop" });
   } catch (error) {
-    errorHandler(err, res)
+    errorHandler(err, res);
   }
 });
 router.get("/about", async (req, res) => {
   res.render(createViewPage("about"), { title: "About" });
 });
-router.get("/shop-details", async (req, res) => {
-  res.render(createViewPage("shop-details"), { title: "Shop Details" });
-});
+
 router.get("/shopping-cart", async (req, res) => {
   res.render(createViewPage("shopping-cart"), { title: "Shopping Cart" });
 });
@@ -47,14 +62,15 @@ router.get("/blog-details", async (req, res) => {
 router.get("/shop", async (req, res) => {
   res.render(createViewPage("shop"), { title: "Shop" });
 });
-router.get("/shop-details", async (req, res) => {
-  res.render(createViewPage("shop-details"), { title: "Shop Details" });
-});
+
 router.get("/shopping-cart", async (req, res) => {
   res.render(createViewPage("shopping-cart"), { title: "Shopping Cart" });
 });
 router.get("/checkout", async (req, res) => {
   res.render(createViewPage("checkout"), { title: "Checkout" });
+});
+router.get("/sign", async (req, res) => {
+  res.render(createViewPage("signInUp"), { title: "Sign In Up" });
 });
 router.get("/404", async (req, res) => {
   res.render(createViewPage("404"), { title: "404" });

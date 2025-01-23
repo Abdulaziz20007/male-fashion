@@ -14,7 +14,7 @@
             <div class="breadcrumb__text">
               <h4>Shop</h4>
               <div class="breadcrumb__links">
-                <a href="./index">Home</a>
+                <a href="/">Home</a>
                 <span>Shop</span>
               </div>
             </div>
@@ -258,8 +258,11 @@
               </div>
             </div>
             <div class="row">
+              <% let count = 0 %>
               <% products.forEach(async function(product) { %>
-                <%- include("./partials/product.ejs", {product, star: product.rating}) %>
+                <% let count = 0 %>
+                <%- include("./partials/product.ejs", {product, count}) %>
+                <% count++ %>
               <% }) %>                 
             </div>
             <div class="row">
@@ -279,8 +282,8 @@
     </section>
     <!-- Shop Section End -->
 
-    <%- include("./partials/footer.ejs") %>
+    <!-- <%- include("./partials/footer.ejs") %>
     <%- include("./partials/search.ejs") %>
-    <%- include("./partials/jsplugins.ejs") %>
+    <%- include("./partials/jsplugins.ejs") %> -->
   </body>
 </html>
