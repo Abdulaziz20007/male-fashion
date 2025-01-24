@@ -1,5 +1,5 @@
 const { errorHandler } = require("../helpers/error_handler.js");
-const Blacklist = require("../schemas/blacklist_schema");
+const Blacklist = require("../schema/blacklist_schema");
 
 const addBlacklistUser = async (req, res) => {
   try {
