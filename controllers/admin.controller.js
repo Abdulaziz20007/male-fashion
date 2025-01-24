@@ -1,5 +1,5 @@
 const { errorHandler } = require("../helpers/error_handler.js");
-const Admin = require("../schemas/admin_schema");
+const Admin = require("../schema/admin_schema");
 const { adminValidation } = require("../validations/admin_validation");
 const bcrypt = require("bcrypt");
 const adminJwt = require("../services/jwt_service");
