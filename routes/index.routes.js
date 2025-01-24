@@ -6,7 +6,9 @@ const cart_itemsRouter = require("./cart_items.routes");
 const contact_messagesRouter = require("./contact_messages.routes");
 const orderRouter = require("./order.routes");
 const order_itemRouter = require("./order_item.routes");
+const adminRouter = require("./admin.routes");
 
+router.use("/admin", adminRouter)
 router.use("/users", userRouter);
 router.use("/products", productRouter);
 router.use("/carts", cartsRouter);
