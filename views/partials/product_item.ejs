@@ -1,0 +1,34 @@
+<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix <%= (count%2==0)? 'new-arrivals' : 'hot-sales' %>">
+  <a href="/shop/<%= product.id %>">
+  <div class="product__item">
+    <div class="product__item__pic set-bg" data-setbg="<%=product.images[3]%>">
+
+    </div>
+
+    </a>
+    <div class="product__item__text">
+      <h6><%= product.name %></h6>
+      <a href="#" class="add-cart">+ Add To Cart</a>
+      <div class="rating">
+        <% for (let j = 1; j <= product.rating; j++) { %>
+          <i class="fa fa-star"></i>
+          <% } %> <% for (let i = product.rating + 1; i <= 5; i++) { %>
+          <i class="fa fa-star-o"></i>
+          <% } %>
+          <i class="fa fa-star-1"></i>
+      </div>
+      <h5>$<%= product.price%></h5>
+      <div class="product__color__select">
+        <label for="pc-13">
+          <input type="radio" id="pc-13" />
+        </label>
+        <label class="active black" for="pc-14">
+          <input type="radio" id="pc-14" />
+        </label>
+        <label class="grey" for="pc-15">
+          <input type="radio" id="pc-15" />
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,7 @@
       <div
         class="product__item__pic set-bg <% count % 2 == 0 ? 'new-arrivals' : 'hot-sales' %>"
         data-setbg="<%= product.images[0] %>"
+        style="background-image: url('<%= product.images[0] %>')"
       >
         <% if(product.discount) { %>
         <span class="label">Sale</span>

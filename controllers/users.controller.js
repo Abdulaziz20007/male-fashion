@@ -2,7 +2,10 @@ const User = require("../schema/User");
 const { errorHandler } = require("../helpers/error_handler");
 const { userValidation } = require("../validations/user.validation");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt");
-const { generateTokens } = require("../services/jwt_service");
+const jwt = require("../services/jwt_service");
+const config = require("config");
+const { v4: uuidv4 } = require("uuid");
+const mailService = require("../services/mail.service");
 
 const getUsers = async (req, res) => {
   try {
@@ -32,6 +35,12 @@ const createUser = async (req, res) => {
       errorHandler(error, res);
     }
     value.password = hashPassword(value.password);
+
+    const verification = uuidv4();
+    value.verification = verification;
+
+    await mailService.sendMailActivationCode(value.email, verification);
+
     const user = await User.create(value);
     res.status(201).send(user);
   } catch (error) {
@@ -86,14 +95,19 @@ const login = async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(404).send({ error: "Email yoki parol noto'g'ri" });
     }
+    if (!user.is_active) {
+      return res.status(404).send({ error: "User aktivatsiya qilinmagan" });
+    }
 
     const payload = {
       id: user._id,
       email: user.email,
       name: user.name,
+      surname: user.surname,
+      phone: user.phone,
     };
 
-    const tokens = generateToken(payload, "user");
+    const tokens = jwt.generateTokens(payload);
     res.cookie("refreshToken", tokens.refreshToken, {
       httpOnly: true,
       secure: true,
@@ -124,7 +138,7 @@ const refreshToken = async (req, res) => {
     return res.status(401).send({ error: "Unauthorized" });
   }
 
-  const tokens = generateToken(payload, "user");
+  const tokens = jwt.generateTokens(payload);
 
   await User.findByIdAndUpdate(payload.id, {
     refreshToken: tokens.refreshToken,
@@ -139,6 +153,21 @@ const refreshToken = async (req, res) => {
   res.status(200).send({ accessToken: tokens.accessToken });
 };
 
+const verifyUser = async (req, res) => {
+  const user = await User.findOne({ verification: req.params.id });
+  if (!user) {
+    return res.status(404).send({ error: "User topilmadi" });
+  }
+  if (user.is_active) {
+    return res.status(400).send({ error: "User aktivatsiya qilingan" });
+  }
+  await User.findByIdAndUpdate(user._id, {
+    is_active: true,
+  });
+  res.redirect("/sign");
+  // res.status(200).send({ message: "User aktivatsiya qilindi" });
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -148,4 +177,5 @@ module.exports = {
   login,
   logout,
   refreshToken,
+  verifyUser,
 };
